@@ -2,17 +2,48 @@
 //
 
 #include <iostream>
+#include <cstdint>
+#include <cstring>
 
-class 
+typedef uint8_t byte;
+
+enum Architecture {
+    k_amd64,
+    k_armv7e
+};
+
+class  BinaryProcessor {
+
+public:
+    static byte GetParsedBinary(byte input_byte);
+    static uint16_t ShiftAndCombineTwoBytes(byte input_byte_1, byte input_byte_2);
+};
 
 
+class RandomNumberGenerator {
+    byte seed_;
+public:
+    byte GenerateRandomNumber();
+    void Seed();
+};
 
-int main()
+    int main(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
+        const Architecture k_architecture_flag = CStringToArchitecture(argv[1]);
+
 }
 
+    Architecture CStringToArchitecture(char cstring[]) {
+        const int k_max_lenght = 6;
+        if (strncmp(cstring, "amd64", k_max_lenght)) {
+            return(k_amd64);
+        }
+        if (strncmp(cstring, "armv7E", k_max_lenght)) {
+            return(k_armv7e);
+        }
 
+    
+    }
 
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
