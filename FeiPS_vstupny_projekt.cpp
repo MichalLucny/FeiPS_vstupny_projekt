@@ -6,11 +6,15 @@
 #include <cstring>
 #include <ctime>
 
+#define BUFFER_SIZE 400
+
+using namespace std;
+
 typedef uint8_t byte;
 
 enum Architecture {
-    k_amd64,
-    k_armv7e
+    k_amd64 = 8,
+    k_armv7e = 4
 };
 
 class  BinaryProcessor {
@@ -33,8 +37,26 @@ public:
 
 
 int main(int argc, char* argv[]) {
-        const Architecture k_architecture_flag = CStringToArchitecture(argv[1]);
+    const Architecture k_architecture_flag = CStringToArchitecture(argv[1]);
+    byte* buffer;
+    
+    switch (k_architecture_flag) {
+    case k_amd64: buffer = (byte*) malloc(BUFFER_SIZE * k_amd64); break;
+    case k_armv7e: buffer = (byte*)malloc(BUFFER_SIZE * k_armv7e); break;
+    }
 
+
+}
+
+byte BinaryProcessor::GetParsedBinary(byte input_byte) {
+   //Brian Kernighan's algorithm
+   //chosen for it's ease of understanding
+    unsigned int count; 
+    for (count = 0; input_byte; count++)
+    {
+        input_byte &= input_byte - 1; 
+    }
+    return (count);
 }
 
 Architecture CStringToArchitecture(char cstring[]) {
@@ -45,7 +67,7 @@ Architecture CStringToArchitecture(char cstring[]) {
         if (strncmp(cstring, "armv7E", k_max_lenght)) {
             return(k_armv7e);
         }
-
+        //add exception
     
 }
 
@@ -55,7 +77,7 @@ RandomNumberGenerator::RandomNumberGenerator() {
 }
 
 uint16_t RandomNumberGenerator::Random() {
-        // Lehmer RNG with Sinclair ZX81 parameters; chosen because of it's small numbers
+        // Lehmer RNG with Sinclair ZX81 parameters; chosen because of simplicity and small numbers
         seed_ = 75 * seed_ % 65537;
         return (seed_);
 }
