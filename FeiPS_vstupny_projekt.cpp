@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdint>
 #include <cstring>
+#include <ctime>
 
 typedef uint8_t byte;
 
@@ -21,19 +22,22 @@ public:
 
 
 class RandomNumberGenerator {
-    byte seed_;
+    uint16_t seed_; // a four digit number
+    uint16_t Random();
 public:
+    RandomNumberGenerator();
     byte GenerateRandomNumber();
     void Seed();
 };
 
-    int main(int argc, char* argv[])
-{
+
+
+int main(int argc, char* argv[]) {
         const Architecture k_architecture_flag = CStringToArchitecture(argv[1]);
 
 }
 
-    Architecture CStringToArchitecture(char cstring[]) {
+Architecture CStringToArchitecture(char cstring[]) {
         const int k_max_lenght = 6;
         if (strncmp(cstring, "amd64", k_max_lenght)) {
             return(k_amd64);
@@ -43,16 +47,25 @@ public:
         }
 
     
-    }
+}
 
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+RandomNumberGenerator::RandomNumberGenerator() {
+        Seed();
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+uint16_t RandomNumberGenerator::Random() {
+        // Lehmer RNG with Sinclair ZX81 parameters; chosen because of it's small numbers
+        seed_ = 75 * seed_ % 65537;
+        return (seed_);
+}
+
+byte RandomNumberGenerator::GenerateRandomNumber() {
+    return(Random() % UINT8_MAX); //UINT8_MAX is maxof(byte) in other words 
+ }
+
+void RandomNumberGenerator::Seed() {
+        seed_ = (uint16_t)(time(nullptr) % (10000 + 1000)) - 1000;  //reminder that seed_ is a four digit number
+}
+
+
