@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdint>
-#include <cstring>
+#include <string>
 #include <ctime>
 #include <exception>
 
@@ -142,11 +142,12 @@ uint16_t GenerateCrc (byte* header, int header_lenght, byte* buffer, int buffer_
 }
 
 Architecture CStringToArchitecture(char cstring[]) {
-    const int k_max_lenght = 6;
-    if (strncmp(cstring, "amd64", k_max_lenght)) {
+    string flag = cstring;
+
+    if (flag==string("amd64")) {
         return(k_amd64);
     }
-    if (strncmp(cstring, "armv7E", k_max_lenght)) {
+    if (flag == string("armv7E")) {
         return(k_armv7e);
     }
     throw (invalid_argument("Incorrect architecture selected!"));
