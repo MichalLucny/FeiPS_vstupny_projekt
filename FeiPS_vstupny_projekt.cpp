@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 
     RandomNumberGenerator rng;
 
-    for (int i = 0; i < BUFFER_SIZE;) {
+    for (int i = 0; i < BUFFER_SIZE;i++) {
         buffer[i] = rng.GenerateRandomNumber();
     }
 
