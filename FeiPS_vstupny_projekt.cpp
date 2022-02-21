@@ -78,6 +78,7 @@ int main(int argc, char* argv[]) {
         fwrite(&byte23, sizeof(uint16_t), sizeof(byte23), f);
         
         uint16_t crc = GenerateCrc(header, HEADER_SIZE, &buffer[i],3, k_architecture_flag);
+        fwrite(&crc, sizeof(uint16_t), sizeof(crc), f);
         i += 3;
     }
 
@@ -105,7 +106,6 @@ uint16_t GenerateCrc (byte* header, int header_lenght, byte* buffer, int buffer_
     //Copyright (c) 2019 Tiago Ventura
     
     uint16_t crc = 0xFFFF;
-    unsigned int i = 0;
     char bit = 0;
 
     for (i = 0; i < dataLenght; i++)
