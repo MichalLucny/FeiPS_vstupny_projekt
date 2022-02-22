@@ -11,6 +11,9 @@ using namespace std;
 
 typedef uint8_t byte;
 
+//For the sake of doing this task i assumed that the architecture settings meant 64bit ints for amd64
+// and 32bit ints for armv7E and that armv7E has flipped (flipped after being flipped as they should be) bytes in CRC
+//Feel free to correct me in person
 enum Architecture {
     k_amd64,
     k_armv7e
@@ -61,7 +64,6 @@ int main(int argc, char* argv[]) {
 
     FILE* f;
     fopen_s(&f,"output.dat", "wb");
-
     
     byte header[HEADER_SIZE] = { 0xAA,0xBB,0x01 };
 
@@ -91,8 +93,11 @@ int main(int argc, char* argv[]) {
 
 
 uint16_t GenerateCrc (byte* header, int header_lenght, byte* buffer, int buffer_lenght, Architecture flag) {
+    int dataLenght = header_lenght + buffer_lenght;
+    
     byte* msg;
-    msg = (byte*) malloc((header_lenght + buffer_lenght) * sizeof(byte));
+    msg = (byte*) malloc(dataLenght * sizeof(byte));
+    
     int i;
     for (i = 0; i < header_lenght; i++) {
         msg[i] = header[i];
@@ -101,7 +106,6 @@ uint16_t GenerateCrc (byte* header, int header_lenght, byte* buffer, int buffer_
         msg[i] = buffer[j];
     }
 
-    int dataLenght = header_lenght + buffer_lenght;
 
     //Copyright (c) 2019 Tiago Ventura
     
@@ -126,10 +130,8 @@ uint16_t GenerateCrc (byte* header, int header_lenght, byte* buffer, int buffer_
         }
     }
 
-
     uint8_t crcl = (uint8_t)crc;
     uint8_t crch = (uint8_t)(crc >> 8);
-
 
     switch (flag) {
     case k_armv7e:
