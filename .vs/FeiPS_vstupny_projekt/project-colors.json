@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a41ad120-f76e-44f1-9b5f-8d7075c62fc6": {
+      "ProjectGuid": "a41ad120-f76e-44f1-9b5f-8d7075c62fc6",
+      "DisplayName": "FeiPS_vstupny_projekt",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "bb8ed718-0287-4154-a6a3-f95f954ceb07": {
+      "ProjectGuid": "bb8ed718-0287-4154-a6a3-f95f954ceb07",
+      "DisplayName": "PythonScript",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
