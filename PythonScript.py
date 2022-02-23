@@ -1,6 +1,8 @@
 import os
 import ctypes
 
+# python 3.10
+
 def check_header(byte_1, byte_2, byte_3):
     if byte_1 == 0xAA and byte_2 == 0xBB and byte_3 == 0x01:
         return 0
@@ -15,12 +17,12 @@ def check_byte1(input_byte, output_byte):
 
 def check_byte23(input_byte_1, input_byte_2, output_byte_1, output_byte_2):
     # a bit of a shortcut here
-    if input_byte_2 == output_byte_2 and input_byte_1 != input_byte_2:
+    if input_byte_2 == output_byte_2 and input_byte_1 != output_byte_1:
         return 0
     else:
         return 1
 
-def check_crc(data_array, crc, flag):
+def check_crc(data_array, crc_array, flag):
     # Copyright (c) 2019 Tiago Ventura
     
     crc = 0xFFFF
@@ -41,7 +43,7 @@ def check_crc(data_array, crc, flag):
     else:
         crc_bytes = crc.to_bytes(2,'big')
    
-    if crc_bytes[0] == crc[0] and crc_bytes[1] == crc[1]:
+    if crc_bytes[0] == crc_array[0] and crc_bytes[1] == crc_array[1]:
         return 0
     else:
         return 1
@@ -62,13 +64,14 @@ f = open("output.dat","rb")
 errCount=-1; 
 
 while True:
-  data = bytearray(9)
-  for i in range (9):
-    data[i]=f.read(1)
+  data = bytearray()
+  data=f.read(9)
 
+  print(data)
+  
   # checking for EOF
   # header bytes are the ones that have to be with a nonzero value
-  if not data[0] or not data[1] or not data[2]:
+  if len(data)<9:
       break
   elif errCount == -1:
       errCount = 0
@@ -79,22 +82,18 @@ while True:
 
   # honestly I don't know why two 0xcc bytes appear here and there
   # feel free to explain it in person
-  datacc1 = bytearray(2)
-  for i in range (2):
-    datacc1[i]=f.read(1)
+  datacc1 = bytearray()
+  datacc1=f.read(2)
 
-  datacrc = bytearray(2)
-  for i in range (2):
-    datacrc[i]=f.read(1)
+  datacrc = bytearray()
+  datacrc=f.read(2)
 
   errCount = errCount + check_crc(data,datacrc,flag)
+  print(errCount)
+  datacc2 = bytearray()
+  datacc2=f.read(2)
 
-  datacc2 = bytearray(2)
-
-  for i in range (2):
-    datacc2[i]=f.read(1)
-
-if errCount>0:
+if errCount==0:
     print("OK")
 else:
     print("CHYBA")
